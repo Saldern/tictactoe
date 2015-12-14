@@ -22,9 +22,69 @@ Class Gamefield{
  private $rowSize;
  private $fieldSize;
  private $cells;
+ private $winnerCells;
+ private $currentPlayer = 1;
+ private $winner;
+ 
  private $player1;
  private $player2;
-
+ /**
+ * Делает поиск выигравшей комбинации, проходя по всему полю и проверяя
+ * 4 направления (горизонталь, вертикаль и 2 диагонали).
+ */
+ private function checkWinner() {
+    for($y = 0; $y < $this->fieldSize; $y++) {
+        for($x = 0; $x < $this->fieldSize; $x++) {
+            $this->checkLine($x, $y, 1, 0);
+            $this->checkLine($x, $y, 1, 1);
+            $this->checkLine($x, $y, 0, 1);
+            $this->checkLine($x, $y, -1, 1);
+        }
+    }
+    if($this->winner) {
+        $this->currentPlayer = null;
+    }
+ }
+ /**
+ * Проверяет, а не находится ли в этом месте поля выигрышная комбинация
+ * из необходимого числа крестиков или ноликов.
+ * Если выигрышная комбинация найдена, запоминает победителя
+ * и саму выигрышную комбинацию в массиве winnerCells.
+ *
+ * @param $startX начальная точка, от которой проверять наличие комбинации
+ * @param $startY
+ * @param $dx направление, в котором искать комбинацию
+ * @param $dy
+ */
+private function checkLine($startX, $startY, $dx, $dy) {
+    $x = $startX;
+    $y = $startY;
+    $field = $this->cells;
+    $value = isset($field[$x][$y])? $field[$x][$y]: null;
+    $cells = array();
+    $foundWinner = false;
+    if($value) {
+        $cells[] = array($x, $y);
+        $foundWinner = true;
+        for($i=1; $i < $this->rowSize; $i++) {
+            $x += $dx;
+            $y += $dy;
+            $value2 = isset($field[$x][$y])? $field[$x][$y]: null;
+            if($value2 == $value) {
+                $cells[] = array($x, $y);
+            } else {
+                $foundWinner = false;
+                break;
+            }
+        }
+    }
+    if($foundWinner) {
+        foreach($cells as $cell) {
+            $this->winnerCells[$cell[0]][$cell[1]] = $value;
+        }
+        $this->winner = $value;
+    }
+}
  public function __construct($size = 3){
      $this->fieldSize = $size;
      if ($this->fieldSize < 3) $this->fieldSize = 3; 
@@ -58,22 +118,32 @@ Class Gamefield{
              $this->rowSize = 5;
              break;
      }
+     $this->winningCells = array();
      $this->cells = array();
-     for ($i=0;$i<$size*$size;$i++){
-         $this->cells[$i]=1;
-     }
-     $this->player1 = new Player(rand(0, 1));
-     $this->player2 = new Player(1-$this->player1->get_turn());
+     $this->winner = null;
+     $this->player1 = new Player(1);
+     $this->player2 = new Player(0);
  }
- public function getRowSize(){
-     return $this->rowSize;
+ public function makeMove($x, $y) {
+    // Учитываем ход, если выполняются все условия:
+    // 1) игра ещё идет,
+    // 2) клетка находится в пределах игрового поля.
+    // 3) в поле на указанном месте ещё пусто,
+    if(($this->currentPlayer)&&(($x >= 0) && ($x < $this->fieldSize))&&
+            (($y >= 0) && ($y < $this->fieldSize))&&(empty($this->cells[$x][$y])))
+    {
+        $current = $this->currentPlayer;
+        $this->cells[$x][$y] = $current;
+        $this->currentPlayer = ($current == 1) ? 2 : 1;  
+        $this->checkWinner();
+    }
  }
- public function getCells(){
-     return $this->cells;
- }
- public function getFieldSize(){
-     return $this->fieldSize;
- }
+ public function getRowSize()       { return $this->rowSize; }
+ public function getCells()         { return $this->cells; }
+ public function getFieldSize()     { return $this->fieldSize; }
+ public function getCurrentPlayer() { return $this->currentPlayer; }
+ public function getWinner()        { return $this->winner; }
+ public function getWinnerCells()   { return $this->winnerCells; }
  public function getActivePlayer(){
      if ($this->player1->get_turn()){
          echo 'Player 1'.'</br>';
