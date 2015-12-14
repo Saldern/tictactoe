@@ -10,7 +10,7 @@
 		<p> Game creation:</p>
 		<ul>
 			<form action="game.php" method="post"> 
-				<li> Size of field(3-10): <?php echo $size.'x'.$size;?></li>
+				<li> Size of field(3-10): </li>
 				<input name="sizeOfField" type="text" value="3">
 				<li> Turn time(sec:5-60): </li>
 				<input name="time" type="text" value="15"></br>

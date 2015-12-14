@@ -2,7 +2,6 @@
 ob_start();
 require_once 'classes.inc.php';
 ?>
-
 <html>
     <head>
         <meta charset="UTF-8">
@@ -12,28 +11,43 @@ require_once 'classes.inc.php';
     <?php
         if (isset($_POST['sizeOfField'])){
                 $sizeOfField = $_POST['sizeOfField'];
-                if ((!(is_int($szieOfFeld)))||($sizeOfField>10)||($sizeOfField<3)){
+                $sizeOfField += 0;
+                if (!(is_int($sizeOfField))){
                         $redirect_page = $_SERVER["HTTP_HOST"];
-                        echo $redirect_page.'<br>';
+                        echo 'Size not int';
+                        header('Location: '.$redirect_page.'/..');
+                }
+                if ($sizeOfField>10){
+                        $redirect_page = $_SERVER["HTTP_HOST"];
+                        echo 'Size > 10';
+                        header('Location: '.$redirect_page.'/..');
+                }
+                if ($sizeOfField<3){
+                        $redirect_page = $_SERVER["HTTP_HOST"];
+                        echo 'Size < 3';
                         header('Location: '.$redirect_page.'/..');
                 }
         }else{
             $redirect_page = $_SERVER['HTTP_HOST'];
-            echo $redirect_page.'<br>';
+            echo 'Size not set';
             header('Location: '.$redirect_page.'/..');
         }
         if (isset($_POST['time'])){
             $game_time = $_POST['time'];
             if ((!(is_int($game_time)))||($game_time>60)||($game_time<0)){
-            $game_time = $_POST['time'];
+                $game_time = $_POST['time'];
+            }
         }else{
             $game_time = 15;
         }
+        $gamefield = new Gamefield($sizeOfField);
+        //echo 'Size: '.$gamefield->getFieldSize().'<br>'.'Row: '.$gamefield->getRowSize().'<br>';
+        //echo 'Active: '.$gamefield->getFieldSize().'<br>';
         $game_end = false;
-        while (!$game_end){
+        /*while (!$game_end){
                 $game_end = true;
                 //$turn = $player1->get_turn();
-                switch (turn){
+                switch ($turn){
                         case 0:
                                 //hodit vtoroi
                                 break;
@@ -41,15 +55,9 @@ require_once 'classes.inc.php';
                                 //hodit pervy
                                 break;
                 }
-        }
-        echo 'refresh';
-        while ($size>0){
-                //exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
-                $size--;
-        }
+        }*/
+        //exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
         ob_end_flush();
     ?> 
     </body>
 </html>
-
-

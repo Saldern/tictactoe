@@ -57,7 +57,24 @@ Class Gamefield{
      }
      $this->cells = array();
      $this->player1 = new Player(rand(0, 1));
-     $this->player2 = new Player(!$player1->get_turn());
+     $this->player2 = new Player(!$this->player1->get_turn());
+ }
+ public function getRowSize(){
+     return $this->rowSize;
+ }
+ public function getFieldSize(){
+     return $this->fieldSize;
+ }
+ public function getActivePlayer(){
+     if ($this->player1->get_turn()){
+         echo 'Player 1';
+         return $this->player1;
+     }else if ($this->player2->get_turn()){
+         echo 'Player 2';
+         return $this->player2;
+     }else{
+         echo 'Both players inactive';
+     }
  }
 }
 ?>
