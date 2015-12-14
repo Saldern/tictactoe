@@ -8,7 +8,7 @@ session_start();
 // Если игры еще нет, создаём новую.
 $game = isset($_SESSION['game'])? $_SESSION['game']: null;
 if(!$game || !is_object($game)) {
-    /*if (isset($_GET['sizeOfField'])){
+    if (isset($_GET['sizeOfField'])){
         $sizeOfField = $_GET['sizeOfField'];
         $sizeOfField += 0;
         if (!(is_int($sizeOfField))){
@@ -30,8 +30,7 @@ if(!$game || !is_object($game)) {
         $redirect_page = $_SERVER['HTTP_HOST'];
         echo 'Size not set.';
         header('Location: '.$redirect_page.'/..');
-    }*/
-    $sizeOfField = 10;
+    }
     $game = new Gamefield($sizeOfField);
 }
 
@@ -43,16 +42,17 @@ if(isset($params['action'])){
         // Обрабатываем ход пользователя.
         $game->makeMove((int)$params['x'], (int)$params['y']);   
     }else if($action == 'newGame'){
-        // Пользователь решил начать новую игру. WARNING
-        //$_SESSION['game'] = null;
-        echo 'NewGame<br>';
-        $sizeOfField = 10;
-        $game = new Gamefield($sizeOfField);
-        //header('Location: '.$redirect_page.'/..');
+        // Пользователь решил начать новую игру.
+        $game = new Gamefield($_SESSION['size']);
+    }else if($action == 'exit'){
+        $_SESSION['game'] = null;
+        $game = null;
+        header('Location: '.$redirect_page.'/..');
     }
 }
 // Добавляем вновь созданную игру в сессию.
 $_SESSION['game'] = $game;
+$_SESSION['size'] = $game->getFieldSize();
 // Отображаем текущее состояние игры в виде HTML страницы.
 $size = $game->getFieldSize();
 $cells = $game->getCells();
@@ -136,6 +136,6 @@ ob_end_flush();
         </div>
 
         <br/><a href="?action=newGame">Start a new game</a>
-        
+        <br/><a href="?action=exit">Delete session, exit</a>
     </body>
 </html>
