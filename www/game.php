@@ -41,8 +41,8 @@ require_once 'classes.inc.php';
             $game_time = 15;
         }
         $gamefield = new Gamefield($sizeOfField);
-        //echo 'Size: '.$gamefield->getFieldSize().'<br>'.'Row: '.$gamefield->getRowSize().'<br>';
-        //echo 'Active: '.$gamefield->getFieldSize().'<br>';
+        echo 'Size: '.$gamefield->getFieldSize().'<br>'.'Row: '.$gamefield->getRowSize().'<br>';
+        echo 'Active: '.$gamefield->getActivePlayer().'<br>';
         $game_end = false;
         /*while (!$game_end){
                 $game_end = true;

@@ -2,7 +2,7 @@
 Class Player{
  private $turn;
  public function __construct($order = false){
-     $this->turn = order;
+     $this->turn = $order;
  }
  public function get_turn(){
      return $this->turn;
@@ -14,6 +14,9 @@ Class Player{
      echo 'Make turn';
      $this->switch_turn();
  }
+ public function __toString (){
+     return 'Player';
+ }
 }
 Class Gamefield{
  private $rowSize;
@@ -22,10 +25,11 @@ Class Gamefield{
  private $player1;
  private $player2;
 
- public function __construct($size = 3) {
+ public function __construct($size = 3){
+     echo $size.'<br>';
      $this->fieldSize = $size;
      if ($this->fieldSize < 3) $this->fieldSize = 3; 
-     switch ($fieldSize){
+     switch ($this->fieldSize){
          case 3:
              $this->rowSize = 3;
              break;
@@ -57,7 +61,7 @@ Class Gamefield{
      }
      $this->cells = array();
      $this->player1 = new Player(rand(0, 1));
-     $this->player2 = new Player(!$this->player1->get_turn());
+     $this->player2 = new Player(1-$this->player1->get_turn());
  }
  public function getRowSize(){
      return $this->rowSize;
@@ -67,10 +71,10 @@ Class Gamefield{
  }
  public function getActivePlayer(){
      if ($this->player1->get_turn()){
-         echo 'Player 1';
+         echo 'Player 1'.'</br>';
          return $this->player1;
      }else if ($this->player2->get_turn()){
-         echo 'Player 2';
+         echo 'Player 2'.'</br>';
          return $this->player2;
      }else{
          echo 'Both players inactive';
