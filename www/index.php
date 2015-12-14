@@ -70,7 +70,7 @@
 			Your link to the game: <a href=game.php>TEST</a>
 		</p>
 		<p> 
-			Damn right </br>: <img src="images/stalin.jpg" alt="pravilno blyat'"/>
+			Damn right </br>: <img src="images/stalin.jpg" alt="pravilno blyat'"/></br>
 		</p>
 		<p> 
 			<img src="images/tree.jpg" width="1024" alt="a tree"/>

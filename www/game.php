@@ -57,9 +57,26 @@ require_once 'classes.inc.php';
         }
         $gamefield = new Gamefield($sizeOfField);
         echo 'Size: '.$gamefield->getFieldSize().'<br>'.'Row: '.$gamefield->getRowSize().'<br>';
-        echo 'Active: '.$gamefield->getActivePlayer().'<br>';
+        echo 'Active: ';$gamefield->getActivePlayer();
         $game_end = false;
-
+        $cells = $gamefield->getCells();
+        for ($i=0;$i<$gamefield->getFieldSize()*$gamefield->getFieldSize();$i++){
+            switch ($cells[$i]){
+                case 0:
+                    echo '<img src="images/blank.jpg" border="1" alt="blank">';
+                    break;
+                case 1:
+                    echo '<img src="images/X.bmp" border="1" alt="X">';
+                    break;
+                case 2:
+                    echo '<img src="images/O.bmp" border="1" alt="O">';
+                    break;
+            }
+            if ($i%$gamefield->getFieldSize() == $gamefield->getFieldSize()-1){
+                echo '<br>';
+            }
+        }
+        //echo '<img src="images/X.jpg" width="1024" alt="X"/>'
         //exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
         ob_end_flush();
     ?> 

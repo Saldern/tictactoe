@@ -26,7 +26,6 @@ Class Gamefield{
  private $player2;
 
  public function __construct($size = 3){
-     echo $size.'<br>';
      $this->fieldSize = $size;
      if ($this->fieldSize < 3) $this->fieldSize = 3; 
      switch ($this->fieldSize){
@@ -60,11 +59,17 @@ Class Gamefield{
              break;
      }
      $this->cells = array();
+     for ($i=0;$i<$size*$size;$i++){
+         $this->cells[$i]=1;
+     }
      $this->player1 = new Player(rand(0, 1));
      $this->player2 = new Player(1-$this->player1->get_turn());
  }
  public function getRowSize(){
      return $this->rowSize;
+ }
+ public function getCells(){
+     return $this->cells;
  }
  public function getFieldSize(){
      return $this->fieldSize;
