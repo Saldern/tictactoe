@@ -41,19 +41,19 @@
 			$user='root';
 			$pswd='';
 			 
-			$dbh = mysql_connect($host, $user, $pswd) or die("Не могу соединиться с MySQL.");
-			mysql_select_db($database) or die("Не могу подключиться к БД");
+			$dbh = mysql_connect($host, $user, $pswd) or die("РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє MySQL.");
+			mysql_select_db($database) or die("РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє Р‘Р”");
 			
 			$query = "SELECT * FROM gamefield";
 			$res = mysql_query($query);
 			if (!$res) {
-				echo 'Ошибка запроса: ' . mysql_error();
+				echo 'РћС€РёР±РєР° Р·Р°РїСЂРѕСЃР°: ' . mysql_error();
 				exit;
 			}
 			echo "<table width='50%' border='1'>";
 			echo "<tr>
-						<td width='80%'>Название</td>
-						<td width='20%'>Число игроков</td>
+						<td width='80%'>РќР°Р·РІР°РЅРёРµ</td>
+						<td width='20%'>Р§РёСЃР»Рѕ РёРіСЂРѕРєРѕРІ</td>
 					</tr>";
 			while($row = mysql_fetch_array($res)){
 				$pole1=$row['key'];
