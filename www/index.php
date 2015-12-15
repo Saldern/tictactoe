@@ -34,6 +34,38 @@
 		}
 		ob_end_flush();
 		?>
+		
+		<?php
+			$host='localhost';
+			$database='tictactoe';
+			$user='root';
+			$pswd='';
+			 
+			$dbh = mysql_connect($host, $user, $pswd) or die("Не могу соединиться с MySQL.");
+			mysql_select_db($database) or die("Не могу подключиться к БД");
+			
+			$query = "SELECT * FROM gamefield";
+			$res = mysql_query($query);
+			if (!$res) {
+				echo 'Ошибка запроса: ' . mysql_error();
+				exit;
+			}
+			echo "<table width='50%' border='1'>";
+			echo "<tr>
+						<td width='80%'>Название</td>
+						<td width='20%'>Число игроков</td>
+					</tr>";
+			while($row = mysql_fetch_array($res)){
+				$pole1=$row['key'];
+				$pole2=$row['key'];
+				echo "<tr>
+						<td>$pole1</td>
+						<td>$pole2 / 2</td>
+					</tr>";
+			}
+			echo "</table>";
+		?>
+		
 		<ul>
 			<form action="index.php" method="get"> 
 				<li> Size of field(3-10): </li>
