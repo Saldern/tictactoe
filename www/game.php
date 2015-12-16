@@ -1,13 +1,21 @@
 <?php
 ob_start();
 require_once 'classes.inc.php';
-
+/*
+где то здесь надо написать цикл, в котором висит игрок пока не получит свой ход
+while(flag){
+flag = запрос в бд()
+что то в таком духе
+}
+*/
 session_start();
 
 // Получаем из сессии текущую игру.
 // Если игры еще нет, создаём новую.
-$game = isset($_SESSION['game'])? $_SESSION['game']: null;
-if(!$game || !is_object($game)) {
+// глобальную сессию можно взять за основу
+// и везде где операции с сессией заменить на операцию с БД
+$game = isset($_SESSION['game'])? $_SESSION['game']: null; // здесь будет запрос в БД создана ли игра
+if(!$game || !is_object($game)) { //создаем если нет
     if (isset($_GET['sizeOfField'])){
         $sizeOfField = $_GET['sizeOfField'];
         $sizeOfField += 0;
@@ -43,14 +51,14 @@ if(isset($params['action'])){
         $game->makeMove((int)$params['x'], (int)$params['y']);   
     }else if($action == 'newGame'){
         // Пользователь решил начать новую игру.
-        $game = new Gamefield($_SESSION['size']);
+        $game = new Gamefield($_SESSION['size']); //перезапись в БД
     }else if($action == 'exit'){
-        $_SESSION['game'] = null;
+        $_SESSION['game'] = null; //удаление игры из БД
         $game = null;
         header('Location: '.$redirect_page.'/..');
     }
 }
-// Добавляем вновь созданную игру в сессию.
+// Добавляем вновь созданную игру в сессию. // в БД
 $_SESSION['game'] = $game;
 $_SESSION['size'] = $game->getFieldSize();
 // Отображаем текущее состояние игры в виде HTML страницы.
