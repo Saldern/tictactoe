@@ -4,9 +4,66 @@ require_once 'classes.inc.php';
 
 session_start();
 
+$host='localhost';
+$database='tictactoe';
+$user='root';
+$pswd='';
+$dbh = mysql_connect($host, $user, $pswd) or die("Не удалось подключиться к MySQL.");
+mysql_select_db($database) or die("Не удалось подключиться к БД");
+
+if (!($_GET['id'])) 
+{
+
+	if (!($_GET['id']))
+		echo '1';
+	if (!(is_int($_GET['id'])))
+		echo '2';
+
+	if (isset($_GET['sizeOfField'])){
+        $sizeOfField = $_GET['sizeOfField'];
+        $sizeOfField += 0;
+        if (!(is_int($sizeOfField))){
+                $redirect_page = $_SERVER["HTTP_HOST"];
+                echo 'Size not int.';
+                header('Location: '.$redirect_page.'/..');
+        }
+        if ($sizeOfField>10){
+                $redirect_page = $_SERVER["HTTP_HOST"];
+                echo 'Size > 10.';
+                header('Location: '.$redirect_page.'/..');
+        }
+        if ($sizeOfField<3){
+                $redirect_page = $_SERVER["HTTP_HOST"];
+                echo 'Size < 3.';
+                header('Location: '.$redirect_page.'/..');
+        }
+    }else{
+        $redirect_page = $_SERVER['HTTP_HOST'];
+        echo 'Size not set.';
+        header('Location: '.$redirect_page.'/..');
+    }
+    $game = new Gamefield($sizeOfField);
+	$query = "INSERT INTO `tictactoe`.`gamefield` 
+	(`id`, `rowSize`, `fieldSize`, `cells`, `winnerCells`, `currentPlayer`,`winner`, `title`, `playersNumber`) 
+	VALUES (NULL, '".$game->getRowSize()."', '".$game->getRowSize()."', '', NULL, '1', NULL, 'Title', '1')";
+	mysql_query($query);
+} 
+else 
+{
+	$query = "чей ход";
+	
+	//while
+	
+	//заполение game
+	//$size = $game->getFieldSize();
+	//$cells = $game->getCells();
+	//$winnerCells = $game->getWinnerCells();	
+}
+
+
 // Получаем из сессии текущую игру.
 // Если игры еще нет, создаём новую.
-$game = isset($_SESSION['game'])? $_SESSION['game']: null;
+/*$game = isset($_SESSION['game'])? $_SESSION['game']: null;
 if(!$game || !is_object($game)) {
     if (isset($_GET['sizeOfField'])){
         $sizeOfField = $_GET['sizeOfField'];
@@ -32,14 +89,17 @@ if(!$game || !is_object($game)) {
         header('Location: '.$redirect_page.'/..');
     }
     $game = new Gamefield($sizeOfField);
-}
+	
+}*/
 
 // Обрабатываем запрос пользователя, выполняя нужное действие.
-$params = $_GET + $_POST;
+/*$params = $_GET + $_POST;
 if(isset($params['action'])){
     $action = $params['action'];
     if($action == 'move'){
         // Обрабатываем ход пользователя.
+		
+		//Вместо 179
         $game->makeMove((int)$params['x'], (int)$params['y']);   
     }else if($action == 'newGame'){
         // Пользователь решил начать новую игру.
@@ -49,14 +109,16 @@ if(isset($params['action'])){
         $game = null;
         header('Location: '.$redirect_page.'/..');
     }
-}
+}*/
+
+
 // Добавляем вновь созданную игру в сессию.
-$_SESSION['game'] = $game;
-$_SESSION['size'] = $game->getFieldSize();
+//$_SESSION['game'] = $game;
+//$_SESSION['size'] = $game->getFieldSize();
 // Отображаем текущее состояние игры в виде HTML страницы.
-$size = $game->getFieldSize();
-$cells = $game->getCells();
-$winnerCells = $game->getWinnerCells();
+//$size = $game->getFieldSize();
+//$cells = $game->getCells();
+//$winnerCells = $game->getWinnerCells();
 
 /*for ($i=0;$i<$game->getFieldSize()*$game->getFieldSize();$i++){
     switch ($cells[$i]){
@@ -127,6 +189,9 @@ ob_end_flush();
                             <?php if(!$player) { ?>
                                 <!-- Клетка свободна. Отображаем здесь ссылку,
                                 на которую нужно кликнуть для совершения хода. -->
+								
+								<!-- обновление бд -->
+								
                                 <a href="?action=move&amp;x=<?php echo $x ?>&amp;y=<?php echo $y ?>"></a>
                             <?php } ?>
                         </div>
@@ -135,7 +200,7 @@ ob_end_flush();
             <?php } ?>
         </div>
 
-        <br/><a href="?action=newGame">Start a new game</a>
-        <br/><a href="?action=exit">Delete session, exit</a>
+        <!--<br/><a href="?action=newGame">Start a new game</a>
+        <br/><a href="?action=exit">Delete session, exit</a>-->
     </body>
 </html>

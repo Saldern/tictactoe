@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Tic-Tac-Toe</title>
-        <meta charset="UTF-8">
+        <meta charset="Windows-1251">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
@@ -40,28 +40,33 @@
 			$database='tictactoe';
 			$user='root';
 			$pswd='';
-			 
 			$dbh = mysql_connect($host, $user, $pswd) or die("Не удалось подключиться к MySQL.");
 			mysql_select_db($database) or die("Не удалось подключиться к БД");
-			
 			$query = "SELECT * FROM gamefield";
 			$res = mysql_query($query);
+			
 			if (!$res) {
 				echo 'Ошибка запроса: ' . mysql_error();
 				exit;
 			}
 			echo "<table width='50%' border='1'>";
 			echo "<tr>
-						<td width='80%'>Название</td>
-						<td width='20%'>Число игроков</td>
-					</tr>";
+						<td width='80%'>Name</td>
+						<td width='20%'>Players number</td>
+				 </tr>";
 			while($row = mysql_fetch_array($res)){
-				$pole1=$row['key'];
-				$pole2=$row['key'];
-				echo "<tr>
-						<td>$pole1</td>
+				$pole1=$row['title'];
+				$pole2=$row['playersNumber'];
+				echo "
+					<tr>
+						<td>
+							<a href=game.php?id=".$row['id']."&sizeOfField=".$row['fieldSize'].">
+								$pole1
+							</a>
+						</td>
 						<td>$pole2 / 2</td>
-					</tr>";
+					</tr>
+					";
 			}
 			echo "</table>";
 		?>
@@ -73,8 +78,8 @@
 				<input value="Start game" type="submit">
 			</form>
 		</ul>		
-		<p> 
+		<!--<p> 
 			If you already created game, use this link: <a href=game.php>THE GAME</a>
-		</p>
+		</p>-->
 	</body>
 </html>
