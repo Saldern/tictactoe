@@ -157,4 +157,3 @@ private function checkLine($startX, $startY, $dx, $dy) {
  }
 }
 ?>
-

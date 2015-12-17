@@ -30,7 +30,7 @@
 			$correct = false;
         }
 		if ($correct){
-			header("Location: game.php?sizeOfField=".$sizeOfField);
+			header("Location: game.php?sizeOfField=".$sizeOfField."&playersNumber=1");
 		}
 		ob_end_flush();
 		?>
@@ -60,7 +60,7 @@
 				echo "
 					<tr>
 						<td>
-							<a href=game.php?id=".$row['id']."&sizeOfField=".$row['fieldSize'].">
+							<a href=game.php?id=".$row['id']."&playersNumber=2>
 								$pole1
 							</a>
 						</td>
