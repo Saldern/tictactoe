@@ -24,7 +24,7 @@ Class Gamefield{
  private $cells;
  private $winnerCells;
  private $currentPlayer = 1;
- private $winner;
+ private $winner = 0;
  
  private $player1;
  private $player2;
@@ -32,6 +32,19 @@ Class Gamefield{
  * Делает поиск выигравшей комбинации, проходя по всему полю и проверяя
  * 4 направления (горизонталь, вертикаль и 2 диагонали).
  */
+
+public function initGame($row)
+{
+    $this->rowSize = $row['rowSize'];
+    $this->fieldSize = $row['fieldSize'];
+    $this->winnerCells = unserialize( base64_decode($row['winnerCells']));
+    $this->cells = unserialize( base64_decode($row['cells']));
+    $this->winner = $row['winner'];
+    $this->currentPlayer = $row['currentPlayer'];
+}
+
+
+
  private function checkWinner() {
     for($y = 0; $y < $this->fieldSize; $y++) {
         for($x = 0; $x < $this->fieldSize; $x++) {
@@ -41,8 +54,8 @@ Class Gamefield{
             $this->checkLine($x, $y, -1, 1);
         }
     }
-    if($this->winner) {
-        $this->currentPlayer = null;
+    if($this->winner > 0) {
+        $this->currentPlayer = 0;
     }
  }
  /**
@@ -120,7 +133,7 @@ private function checkLine($startX, $startY, $dx, $dy) {
      }
      $this->winningCells = array();
      $this->cells = array();
-     $this->winner = null;
+     //$this->winner = 0;
      $this->player1 = new Player(1);
      $this->player2 = new Player(0);
  }

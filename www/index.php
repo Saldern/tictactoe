@@ -7,16 +7,11 @@
     </head>
     <body>
 		<h1> Tic-Tac-Toe </h1>
-		<p> Game creation:</p>
 		<?php 
 		$correct = true;
 		if (isset($_GET['sizeOfField'])){
-                $sizeOfField = $_GET['sizeOfField'];
-                $sizeOfField += 0;
-                if (!(is_int($sizeOfField))){
-                    echo 'Error. Size not int. ';
-					$correct = false;
-                }
+                $sizeOfField = (int)$_GET['sizeOfField'];
+                $title = $_GET['title'];
                 if ($sizeOfField>10){
                     echo 'Error. Size > 10. ';
 					$correct = false;
@@ -26,11 +21,10 @@
 					$correct = false;
                 }
         }else{
-            echo 'Error. Size not set. ';
 			$correct = false;
         }
 		if ($correct){
-			header("Location: game.php?sizeOfField=".$sizeOfField."&playersNumber=1");
+			header("Location: game.php?sizeOfField=".$sizeOfField."&currentPlayer=1&title=".$title);
 		}
 		ob_end_flush();
 		?>
@@ -59,27 +53,32 @@
 				$pole2=$row['playersNumber'];
 				echo "
 					<tr>
-						<td>
-							<a href=game.php?id=".$row['id']."&playersNumber=2>
-								$pole1
-							</a>
-						</td>
-						<td>$pole2 / 2</td>
+						<td>";
+				if ($pole2 > 1) 
+					echo $pole1;
+				else 
+				{
+					echo "<a href=addPlayer.php?id=".$row['id'].">
+								".$pole1."
+							</a>";
+				}
+				echo	"</td>
+						<td>".$pole2." / 2</td>
 					</tr>
 					";
 			}
 			echo "</table>";
 		?>
 		
+		<p> Game creation:</p>
 		<ul>
 			<form action="index.php" method="get"> 
 				<li> Size of field(3-10): </li>
 				<input name="sizeOfField" type="text" value="3">
+				<li> Title: </li>
+				<input name="title" type="text" value="Title">
 				<input value="Start game" type="submit">
 			</form>
 		</ul>		
-		<!--<p> 
-			If you already created game, use this link: <a href=game.php>THE GAME</a>
-		</p>-->
 	</body>
 </html>
